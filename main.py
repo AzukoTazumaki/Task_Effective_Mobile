@@ -1,5 +1,4 @@
 from random import randint
-from json import load, dump
 
 
 class Book:
