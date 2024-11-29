@@ -1,4 +1,5 @@
 from random import randint
+from validator import ValidateBook
 
 
 class Book:
