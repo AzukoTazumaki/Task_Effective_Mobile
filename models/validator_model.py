@@ -1,16 +1,18 @@
-from main import Book
 from re import search
 
 
-class ValidateBook(Book):
+class Validator:
     variable: dict | ValueError
 
-    def __init__(self):
-        super().__init__(
-            author=self.author,
-            title=self.title,
-            year=self.year
-        )
+    def __init__(self, book: dict):
+        """
+        :param book: на валидацию приходит вся книга
+        """
+        self.book_id = book['id']
+        self.title = book['title']
+        self.author = book['author']
+        self.year = book['year']
+        self.status = book['status']
 
     def validate_title(self) -> str | ValueError:
         if self.title == '':
@@ -47,7 +49,9 @@ class ValidateBook(Book):
                 return var()
             continue
         return {
+            'id': self.book_id,
             'title': self.validate_title(),
             'author': self.validate_author(),
-            'year': self.validate_year()
+            'year': self.validate_year(),
+            'status': self.status
         }
