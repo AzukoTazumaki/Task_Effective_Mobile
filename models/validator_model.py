@@ -1,4 +1,6 @@
 from re import search
+from messages import validate_title_error, validate_title_len_error, validate_author_error, validate_author_len_error, \
+    validate_author_only_digits, validate_year_error, validate_year_type_error, validate_year_range_error
 
 
 class Validator:
@@ -8,38 +10,40 @@ class Validator:
         """
         :param book: на валидацию приходит вся книга
         """
-        self.book_id = book['id']
-        self.title = book['title']
-        self.author = book['author']
-        self.year = book['year']
-        self.status = book['status']
+        self.book_id: int = book['id']
+        self.title: str = book['title']
+        self.author: str = book['author']
+        self.year: int = book['year']
+        self.status: bool = book['status']
 
     def validate_title(self) -> str | ValueError:
         if self.title == '':
-            raise ValueError('Ошибка ввода. Напишите, пожалуйста, название книги.')
-        elif len(self.title > 45):
-            raise ValueError('Ошибка ввода. Длина названия не должна превышать 15 символов.')
+            return ValueError(validate_title_error)
+        elif len(self.title) > 45:
+            return ValueError(validate_title_len_error)
         else:
             return self.title
 
     def validate_author(self) -> str | ValueError:
         if self.author == '':
-            return ValueError('Ошибка ввода. Напишите, пожалуйста, имя автора книги.')
-        elif len(self.author > 15):
-            return ValueError('Ошибка ввода. Длина имени не должна превышать 15 символов.')
+            return ValueError(validate_author_error)
+        elif len(self.author) > 15:
+            return ValueError(validate_author_len_error)
         else:
+            author_without_spaces = self.author.replace(' ', '')
+            if author_without_spaces.isdigit():
+                return ValueError(validate_author_only_digits)
             return self.author
 
     def validate_year(self) -> int | ValueError:
-        if search(r'/\D/g', self.year):
-            return ValueError('Ошибка при попытке добавить книгу. Год ее выпуска, к сожалению, не может быть чем-то '
-                              'кроме числа.')
+        if not int(self.year):
+            return ValueError(validate_year_type_error)
         elif self.year == '':
-            return ValueError('Ошибка при попытке добавить книгу. Необходимо ввести год ее выпуска.')
+            return ValueError(validate_year_error)
         else:
-            year = str(self.year)
+            year = int(self.year)
             if year > 2024 or year < 1900:
-                return ValueError('Ошибка при попытке добавить книгу. Год выпуска должен быть в пределах [1900 - 2024]')
+                return ValueError(validate_year_range_error)
             return year
 
     def final_validation(self) -> dict | ValueError:
@@ -53,5 +57,5 @@ class Validator:
             'title': self.validate_title(),
             'author': self.validate_author(),
             'year': self.validate_year(),
-            'status': self.status
+            'status': 'В наличии' if self.status is True else 'Выдана'
         }

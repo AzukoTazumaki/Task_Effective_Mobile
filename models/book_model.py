@@ -16,4 +16,13 @@ class Book:
         self.year = year
         self.status = True
 
+    def return_dict(self):
+        return {
+            "id": self.book_id,
+            "title": self.title,
+            "author": self.author,
+            "year": self.year,
+            "status": self.status
+        }
+
     
