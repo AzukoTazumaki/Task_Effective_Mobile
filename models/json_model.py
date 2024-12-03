@@ -37,20 +37,16 @@ class JSON:
 
 
 class MethodsJSON(JSON):
-    def __init__(self, data: dict):
-        """
-        :param data: приходит словарь, который успешно прошел валидацию, затем выполняется метод, указанный пользователем
-        """
+    def __init__(self):
         super().__init__()
-        self.data = data
 
     def upload_data(self, json_data: dict):
         with open(self.path, 'w') as file:
             dump(json_data, file, ensure_ascii=False, indent=4)
             file.close()
 
-    def add_data_to_json(self):
-        self.loaded_data['books'].append(self.data)
+    def add_data_to_json(self, data: dict):
+        self.loaded_data['books'].append(data)
         self.upload_data(self.loaded_data)
 
     def remove_data_from_json(self, book_id: int):
@@ -68,9 +64,11 @@ class MethodsJSON(JSON):
             self.upload_data(self.loaded_data)
             return True
 
-    def update_data_in_json(self):
-        if self.data['status'] == 'В наличии':
-            self.data['status'] = 'Выдана'
+    def update_data_in_json(self, index: int):
+        books = self.loaded_data['books']
+        if books[index]['status'] == 'В наличии':
+            books[index]['status'] = 'Выдана'
         else:
-            self.data['status'] = 'В наличии'
-        return self.data
+            books[index]['status'] = 'В наличии'
+        self.upload_data(self.loaded_data)
+        return books[index]['status']

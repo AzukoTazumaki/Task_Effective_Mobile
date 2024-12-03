@@ -162,7 +162,10 @@ from random import randint
 # print(a)
 #
 # print(ValueError('Привет'))
-string = 'CapCapapCap'
-print(string.replace(' ', ''))
-print(string.isalpha())
-print(string.isalnum())
+# string = 'CapCapapCap'
+# print(string.replace(' ', ''))
+# print(string.isalpha())
+# print(string.isalnum())
+
+a = False
+print(int(a))

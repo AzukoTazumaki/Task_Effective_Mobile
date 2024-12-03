@@ -13,6 +13,9 @@ class App:
         sleep(1)
         # welcome_msg = [self.app_name, welcome_msg_pt_1, welcome_msg_pt_2, welcome_msg_pt_3]
         # self.delay_messages(welcome_msg, 2)
+        self.choose_method()
+
+    def choose_method(self):
         while True:
             try:
                 method = int(input(choose_method))
@@ -45,6 +48,7 @@ class App:
                     else:
                         break
                 print(add_book_success.format(book_id=created_book))
+                return self.choose_method()
 
             case 2:
                 loaded_data = self.library.read_books()
@@ -58,8 +62,20 @@ class App:
                         year=book['year'],
                         status=book['status']))
                 print(all_books_len_msg.format(books_len=books_len))
+                return self.choose_method()
             case 3:
-                pass
+                while True:
+                    book_id = input(id_input)
+                    try:
+                        params = self.library.update_book(book_id)
+                        print(changed_book_status.format(title=params[0], status=params[1]))
+                        break
+                    except TypeError:
+                        print(search_id_error)
+                        self.delay_messages(self.reload_msg, 0.7)
+                        continue
+                return self.choose_method()
+
             case 4:
                 pass
             case 5:
