@@ -18,35 +18,27 @@ class Search:
         return False
 
     def search_by_argument(self, arg_key: str, arg_class: str | int | bool) -> list | bool:
-        found_books = []
+        found_books_null = []
 
         def match_check():
             for index, book in enumerate(self.loaded_data['books']):
                 if (arg_class in book[arg_key]) or (arg_class == book[arg_key]):
-                    found_books.append(self.loaded_data['books'][index])
+                    found_books_null.append(self.loaded_data['books'][index])
                 continue
-            return found_books
+            return found_books_null
 
-        if len(match_check()) == 0:
+        found_books = match_check()
+
+        if len(found_books) == 0:
             return False
         else:
             return found_books
 
     def match_args(self, argument: str) -> str | int | bool | list:
         match argument:
-            case 'id':
-                return self.search_by_id()
             case 'title':
                 return self.search_by_argument('title', self.title)
             case 'author':
                 return self.search_by_argument('author', self.author)
             case 'year':
                 return self.search_by_argument('year', self.year)
-            case 'status':
-                return self.search_by_argument('status', self.status)
-
-
-if __name__ == '__main__':
-    search = Search(status="4t3")
-    result = search.match_args('status')
-    print(result)

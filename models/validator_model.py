@@ -1,6 +1,7 @@
 from re import search
 from messages import validate_title_error, validate_title_len_error, validate_author_error, validate_author_len_error, \
-    validate_author_only_digits, validate_year_error, validate_year_type_error, validate_year_range_error
+    validate_author_only_digits, validate_year_error, validate_year_type_error, validate_year_range_error, validate_id_error, \
+    validate_number_error
 
 
 class Validator:
@@ -15,6 +16,22 @@ class Validator:
         self.author: str = book['author']
         self.year: int = book['year']
         self.status: bool = book['status']
+
+    @staticmethod
+    def validate_id(book_id: int):
+        try:
+            int_number = int(book_id)
+            return int_number
+        except ValueError:
+            return ValueError(validate_id_error)
+
+    @staticmethod
+    def validate_number(number: int):
+        try:
+            int_number = int(number)
+            return int_number
+        except ValueError:
+            return ValueError(validate_number_error)
 
     def validate_title(self) -> str | ValueError:
         if self.title == '':

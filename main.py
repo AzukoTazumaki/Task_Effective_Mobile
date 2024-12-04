@@ -1,28 +1,34 @@
 from time import sleep
 from models.library_model import Library
 from messages import *
+from sys import exit
 
 
 class App:
     def __init__(self):
         self.library = Library()
         self.reload_msg = [reload_1, reload_2, reload_3]
+        self.quit_msg = [quit_1, quit_2, quit_3, quit_4]
         self.app_name = 'БИБЛИОТЕКА AZUKO'
 
     def run(self):
-        sleep(1)
-        # welcome_msg = [self.app_name, welcome_msg_pt_1, welcome_msg_pt_2, welcome_msg_pt_3]
-        # self.delay_messages(welcome_msg, 2)
-        self.choose_method()
+        try:
+            sleep(1)
+            # welcome_msg = [self.app_name, welcome_msg_pt_1, welcome_msg_pt_2, welcome_msg_pt_3]
+            # self.delay_messages(welcome_msg, 2)
+            self.choose_method()
+        except KeyboardInterrupt:
+            self.exit_app()
 
     def choose_method(self):
         while True:
             try:
                 method = int(input(choose_method))
-                if 1 <= method <= 5:
+                if 1 <= method <= 6:
                     return self.run_method(method)
                 else:
-                    return self.delay_messages([method_out_of_range_msg, *self.reload_msg], 0.7)
+                    self.delay_messages([method_out_of_range_msg, *self.reload_msg], 0.7)
+                    continue
             except ValueError:
                 self.delay_messages([choose_method_error, *self.reload_msg], 0.7)
                 continue
@@ -63,6 +69,7 @@ class App:
                         status=book['status']))
                 print(all_books_len_msg.format(books_len=books_len))
                 return self.choose_method()
+
             case 3:
                 while True:
                     book_id = input(id_input)
@@ -77,11 +84,43 @@ class App:
                 return self.choose_method()
 
             case 4:
-                pass
+                while True:
+                    book_id = input(id_input)
+                    deleted_book = self.library.delete_book(book_id)
+                    if not deleted_book:
+                        print(validate_id_error)
+                        self.delay_messages(self.reload_msg, 0.7)
+                        continue
+                    elif type(deleted_book) is ValueError:
+                        print(search_id_error)
+                        self.delay_messages(self.reload_msg, 0.7)
+                        continue
+                    else:
+                        print(deleted_book_success)
+                        break
+                return self.choose_method()
+
             case 5:
-                pass
+                self.delay_messages([search_by_argument_msg], 1)
+                parameter = input(search_by_argument_input)
+                fragment = input(search_fragment_input)
+                searched_books: list = self.library.search_books(parameter, fragment)
+                if searched_books is False:
+                    print(searched_null)
+                    self.delay_messages(self.reload_msg, 0.7)
+                else:
+                    self.delay_messages(searched_books, 0.4)
+                return self.choose_method()
+
+            case 6:
+                self.exit_app()
+
+    def exit_app(self):
+        self.delay_messages(self.quit_msg, 0.7)
+        sleep(1.5)
 
 
 if __name__ == "__main__":
     app = App()
     app.run()
+
