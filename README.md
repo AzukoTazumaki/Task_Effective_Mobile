@@ -42,7 +42,7 @@ python -m venv venv && source venv/bin/activate
 ### `Pipenv`:
 
 ```zsh
-python -m pipenv shell && pipenv install
+python -m pipenv shell
 ```
 
 Затем запустите команду ниже, находясь в текущей директории и запустите приложение:
