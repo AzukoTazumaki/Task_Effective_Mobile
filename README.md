@@ -51,10 +51,4 @@ python -m pipenv shell
 python main.py
 ```
 
-or
-
-```zsh
-python3
-```
-
 Готово! Добавляйте книги и пополняйте библиотеку бестселлерами!
