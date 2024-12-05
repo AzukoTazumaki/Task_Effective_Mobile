@@ -167,5 +167,5 @@ from random import randint
 # print(string.isalpha())
 # print(string.isalnum())
 
-a = False
-print(int(a))
+# a = False
+# print(int(a))
